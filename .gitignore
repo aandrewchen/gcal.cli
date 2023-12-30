@@ -1,0 +1,8 @@
+gcal-cli-env/
+__pycache__/
+
+token.json
+
+credentials.json
+
+.env
