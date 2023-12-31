@@ -12,7 +12,7 @@ SCOPES = ["https://www.googleapis.com/auth/calendar"]
 load_dotenv()
 
 
-def create_calendar_service():
+def get_auth():
     creds = None
 
     if os.path.exists("token.json"):

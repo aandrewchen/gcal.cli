@@ -1,13 +1,13 @@
 import os
 
-from auth import create_calendar_service
+from auth import get_auth
 from get_event import get_upcoming_events
 from create_event import create_event
 
 calendar_id = os.environ.get("CALENDAR_ID")
 
 def main():
-    service = create_calendar_service()
+    service = get_auth()
 
     print("Getting the upcoming 10 events")
     events = get_upcoming_events(service, calendar_id)
