@@ -1,5 +1,6 @@
 gcal-cli-env/
 __pycache__/
+.pytest_cache/
 
 token.json
 
