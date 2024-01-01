@@ -3,6 +3,8 @@ import os
 import typer
 from typing_extensions import Annotated
 
+import inquirer
+
 from utils.auth import get_auth
 from utils.get_event import get_upcoming_events
 from utils.create_event import create_event
@@ -19,9 +21,16 @@ def create():
     Create an upcoming event
     """
     summary = typer.prompt("What are you doing?")
+    color = [
+    inquirer.List('color',
+                message="What color should this event be?",
+                choices=['1', '2', '3', '4', '5', '6', '7', 'Graphite', '9', '10', '11'],
+            ),
+    ]
+    answer = inquirer.prompt(color)
     
     print("Creating an event")
-    create_event(service, calendar_id, summary)
+    create_event(service, calendar_id, summary, answer["color"])
 
 @app.command()
 def get(count: str):
@@ -39,7 +48,9 @@ def get(count: str):
 
 @app.command()
 def test():
-    print("Testing")
+    colors = service.colors().get().execute()
+
+    print(colors)
 
 if __name__ == "__main__":
     app()
