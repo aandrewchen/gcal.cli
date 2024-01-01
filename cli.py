@@ -19,9 +19,12 @@ def create():
     create_event(service, calendar_id)
 
 @app.command()
-def get():
-    print("Getting the upcoming 10 events")
-    events = get_upcoming_events(service, calendar_id)
+def get(count: str):
+    """
+    Get the specified number of upcoming events
+    """
+    print(f"Getting the upcoming {count} events")
+    events = get_upcoming_events(service, calendar_id, count)
     if not events:
         print("No upcoming events found.")
     else:

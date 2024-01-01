@@ -1,13 +1,13 @@
 import datetime
 
-def get_upcoming_events(service, calendar_id):
+def get_upcoming_events(service, calendar_id, maxResults):
    now = datetime.datetime.utcnow().isoformat() + "Z"
    events_result = (
        service.events()
        .list(
            calendarId=calendar_id,
            timeMin=now,
-           maxResults=10,
+           maxResults=maxResults,
            singleEvents=True,
            orderBy="startTime",
        )
