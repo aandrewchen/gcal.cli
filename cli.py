@@ -1,20 +1,21 @@
 import os
 
 import typer
-from typing import Optional
 from typing_extensions import Annotated
 
-from auth import get_auth
-from get_event import get_upcoming_events
-from create_event import create_event
+from utils.auth import get_auth
+from utils.get_event import get_upcoming_events
+from utils.create_event import create_event
 
 calendar_id = os.environ.get("CALENDAR_ID")
 
+app = typer.Typer()
 
-def main(start: Annotated[Optional[str], typer.Argument()] = None):
+@app.command()
+def main(start: Annotated[str, typer.Argument()] = "get"):
     service = get_auth()
 
-    if start is None or start == "get":
+    if start == "get":
         print("Getting the upcoming 10 events")
         events = get_upcoming_events(service, calendar_id)
         if not events:
@@ -23,9 +24,11 @@ def main(start: Annotated[Optional[str], typer.Argument()] = None):
             for event in events:
                 start = event["start"].get("dateTime", event["start"].get("date"))
                 print(start, event["summary"])
-    elif start =="create":
+    elif start == "create":
         print("Creating an event")
         create_event(service, calendar_id)
+    elif start == "test":
+        print("Testing")
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
