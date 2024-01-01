@@ -15,8 +15,13 @@ service = get_auth()
 
 @app.command()
 def create():
+    """
+    Create an upcoming event
+    """
+    summary = typer.prompt("What are you doing?")
+    
     print("Creating an event")
-    create_event(service, calendar_id)
+    create_event(service, calendar_id, summary)
 
 @app.command()
 def get(count: str):

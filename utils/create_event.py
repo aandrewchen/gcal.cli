@@ -1,6 +1,6 @@
-def create_event(service, calendar_id):
+def create_event(service, calendar_id, summary):
    event = {
-       "summary": "Test",
+       "summary": summary,
        "description": "Test",
        "colorId": "3",
        "start": {
