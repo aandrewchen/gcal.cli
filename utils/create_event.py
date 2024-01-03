@@ -1,20 +1,31 @@
-def create_event(service, calendar_id, summary, color):
+from datetime import datetime, timedelta
+
+def create_event(service, calendar_id, summary, color, startTime, endTime):
     color_mapping = {
+        "Lavendar": 1,
+        "Sage": 2,
+        "Grape": 3,
+        "Flamingo": 4,
+        "Banana": 5,
+        "Tangerine": 6,
+        "Peacock": 7,
         "Graphite": 8,
+        "Blueberry": 9,
+        "Basil": 10,
+        "Tomato": 11,
     }
    
     colorId = color_mapping[color]
 
     event = {
         "summary": summary,
-        "description": "test",
         "colorId": colorId,
         "start": {
-            "dateTime": "2023-12-30T09:00:00-07:00",
+            "dateTime": startTime,
             "timeZone": "America/Los_Angeles",
         },
         "end": {
-            "dateTime": "2023-12-30T17:00:00-07:00",
+            "dateTime": endTime,
             "timeZone": "America/Los_Angeles",
         },
     }
