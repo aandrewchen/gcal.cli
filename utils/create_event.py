@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-def create_event(service, calendar_id, summary, color, startTime, endTime):
+def create_event(service, calendar_id, summary, color, startTime, endTime, isRecurring, days, endDate):
     color_mapping = {
         "Lavendar": 1,
         "Sage": 2,
@@ -14,8 +14,28 @@ def create_event(service, calendar_id, summary, color, startTime, endTime):
         "Basil": 10,
         "Tomato": 11,
     }
-   
+
     colorId = color_mapping[color]
+
+    days_mapping = {
+        "Monday": "MO",
+        "Tuesday": "TU",
+        "Wednesday": "WE",
+        "Thursday": "TH",
+        "Friday": "FR",
+        "Saturday": "SA",
+        "Sunday": "SU",
+        "Everyday": "MO,TU,WE,TH,FR,SA,SU",
+    }
+
+    if isRecurring == "y":
+        if days == "Everyday":
+            freq = "DAILY"
+        else:
+            freq = "WEEKLY"
+            days = ",".join([days_mapping[day] for day in days])
+
+        recurrence = f"RRULE:FREQ={freq};UNTIL={endDate}T000000Z;BYDAY={days}"
 
     event = {
         "summary": summary,
@@ -30,5 +50,24 @@ def create_event(service, calendar_id, summary, color, startTime, endTime):
         },
     }
 
+    if isRecurring == "y":
+        event["recurrence"] = [recurrence]
+    
+    # event = {
+    #     'summary': 'Appointment',
+    #     'start': {
+    #         'dateTime': '2024-01-04T10:00:00.000-07:00',
+    #         'timeZone': 'America/Los_Angeles'
+    #     },
+    #     'end': {
+    #         'dateTime': '2024-01-04T10:25:00.000-07:00',
+    #         'timeZone': 'America/Los_Angeles'
+    #     },
+    #     'recurrence': [
+    #         'RRULE:UNTIL=20240201T170000Z;BYDAY=TH,FR',
+    #     ],
+    # }
+
     event = service.events().insert(calendarId=calendar_id, body=event).execute()
     print("Event created: %s" % (event.get("htmlLink")))
+    # print(days)
