@@ -1,2 +1,2 @@
-# Andrew's Google Calendar CLI Tool
+# gcal.cli
 - Technologies Used: Python3, Pytest, Typer, Google Calendar API
