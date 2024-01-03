@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 from utils.auth import get_auth
 from utils.get_event import get_upcoming_events
-from utils.create_event import create_event, add_oneHour
+from utils.create_event import create_event
 
 calendar_id = os.environ.get("CALENDAR_ID")
 
@@ -26,10 +26,24 @@ def create():
 
     isRecurring = typer.prompt("Is this a recurring event? (y/n)")
 
-    # if isRecurring == "y":
+    if isRecurring == "y":
+        days = [
+            inquirer.Checkbox('days',
+                message="Which days does this event occur?",
+                choices=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Everyday'],
+                carousel=True,
+            ),
+        ]
 
+        days = inquirer.prompt(days)
 
-    date = typer.prompt("What date is this event? (YYYY-MM-DD)")
+        endDate = typer.prompt("When does this recurring event end? (YYYY-MM-DD)").replace("-", "")
+
+    if isRecurring == "y":
+        date = typer.prompt("What date is the first event? (YYYY-MM-DD)")
+    else:
+        date = typer.prompt("What date is the event? (YYYY-MM-DD)")
+
     startHrMin = typer.prompt("What time does this event start? (HH:MM)")
     endHrMin = typer.prompt("What time does this event end? (HH:MM)")
 
@@ -42,12 +56,22 @@ def create():
                 choices=['Lavendar', 'Sage', 'Grape', 'Flamingo', 'Banana', 'Tangerine', 'Peacock', 'Graphite', 'Blueberry', 'Basil', 'Tomato'],
             ),
     ]
-    answer = inquirer.prompt(color)
+    color = inquirer.prompt(color)
 
     print("Creating an event")
     print(startTime)
     print(endTime)
-    create_event(service, calendar_id, summary, answer["color"], startTime, endTime)
+    create_event(
+        service, 
+        calendar_id, 
+        summary, 
+        color["color"], 
+        startTime, 
+        endTime,
+        isRecurring,
+        days["days"] if isRecurring == "y" else None,
+        endDate if isRecurring == "y" else None,
+    )
 
 @app.command()
 def get(count: Annotated[str, typer.Argument()] = "10"):
