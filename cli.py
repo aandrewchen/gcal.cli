@@ -5,7 +5,7 @@ from typing_extensions import Annotated
 
 import inquirer
 
-from datetime import datetime, timedelta
+from InquirerPy import prompt as promptpy
 
 from utils.auth import get_auth
 from utils.get_event import get_upcoming_events
@@ -50,13 +50,24 @@ def create():
     startTime = f"{date}T{startHrMin}:00"
     endTime = f"{date}T{endHrMin}:00"
 
+    # color = [
+    # inquirer.List('color',
+    #             message="What color should this event be?",
+    #             choices=['Lavendar', 'Sage', 'Grape', 'Flamingo', 'Banana', 'Tangerine', 'Peacock', 'Graphite', 'Blueberry', 'Basil', 'Tomato'],
+    #         ),
+    # ]
+    # color = inquirer.prompt(color)
+
     color = [
-    inquirer.List('color',
-                message="What color should this event be?",
-                choices=['Lavendar', 'Sage', 'Grape', 'Flamingo', 'Banana', 'Tangerine', 'Peacock', 'Graphite', 'Blueberry', 'Basil', 'Tomato'],
-            ),
+        {
+            "type": "fuzzy",
+            "message": "What color should this event be?",
+            "choices": ['Lavendar', 'Sage', 'Grape', 'Flamingo', 'Banana', 'Tangerine', 'Peacock', 'Graphite', 'Blueberry', 'Basil', 'Tomato'],
+            "name": "color",
+        }
     ]
-    color = inquirer.prompt(color)
+
+    color = promptpy(color)
 
     print("Creating an event")
     print(startTime)
@@ -88,10 +99,12 @@ def get(count: Annotated[str, typer.Argument()] = "10"):
             print(start, event["summary"])
 
 @app.command()
-def test():
-    colors = service.colors().get().execute()
+def main(name: str, lastname: Annotated[str, typer.Option(prompt=True)]):
+    print(f"Hello {name}, your lastname is: {lastname}")
 
-    print(colors)
+@app.command()
+def test():
+    print("Testing")
 
 if __name__ == "__main__":
     app()
