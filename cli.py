@@ -18,26 +18,35 @@ app = typer.Typer()
 service = get_auth()
 
 @app.command()
-def create():
+def create(
+    summary: Annotated[str, typer.Option(help="What is the event?")] = None,
+    isRecurring: Annotated[str, typer.Option(help="Is the event recurring? (y/n)")] = None,
+    days: Annotated[str, typer.Option(help="What days does this event occur?")] = None,
+    endDate: Annotated[str, typer.Option(help="When does this recurring event end? (YYYY-MM-DD)")] = None,
+):
     """
     Create an upcoming event
     """
-    summary = typer.prompt("What are you doing?")
+    if summary is None:
+        summary = typer.prompt("What are you doing?")
 
-    isRecurring = typer.prompt("Is this a recurring event? (y/n)")
+    if isRecurring is None:
+        isRecurring = typer.prompt("Is this a recurring event? (y/n)")
 
     if isRecurring == "y":
-        days = [
-            inquirer.Checkbox('days',
-                message="Which days does this event occur?",
-                choices=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Everyday'],
-                carousel=True,
-            ),
-        ]
+        if days is None:
+            days = [
+                inquirer.Checkbox('days',
+                    message="Which days does this event occur?",
+                    choices=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Everyday'],
+                    carousel=True,
+                ),
+            ]
 
-        days = inquirer.prompt(days)
+            days = inquirer.prompt(days)
 
-        endDate = typer.prompt("When does this recurring event end? (YYYY-MM-DD)").replace("-", "")
+        if endDate is None:
+            endDate = typer.prompt("When does this recurring event end? (YYYY-MM-DD)").replace("-", "")
 
     if isRecurring == "y":
         date = typer.prompt("What date is the first event? (YYYY-MM-DD)")
@@ -75,11 +84,11 @@ def create():
     create_event(
         service, 
         calendar_id, 
-        summary, 
+        summary if summary is None else summary, 
         color["color"], 
         startTime, 
         endTime,
-        isRecurring,
+        isRecurring if isRecurring is None else isRecurring,
         days["days"] if isRecurring == "y" else None,
         endDate if isRecurring == "y" else None,
     )
