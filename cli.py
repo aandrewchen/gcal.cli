@@ -21,8 +21,12 @@ service = get_auth()
 def create(
     summary: Annotated[str, typer.Option(help="What is the event?")] = None,
     isRecurring: Annotated[str, typer.Option(help="Is the event recurring? (y/n)")] = None,
-    days: Annotated[str, typer.Option(help="What days does this event occur?")] = None,
-    endDate: Annotated[str, typer.Option(help="When does this recurring event end? (YYYY-MM-DD)")] = None,
+    days: Annotated[str, typer.Option(help="If recurring, what days does this event occur?")] = None,
+    endDate: Annotated[str, typer.Option(help="If recurring, when does this recurring event end? (YYYY-MM-DD)")] = None,
+    date: Annotated[str, typer.Option(help="What date is the (first) event? (YYYY-MM-DD)")] = None,
+    start: Annotated[str, typer.Option(help="What time does this event start? (HH:MM)")] = None,
+    end: Annotated[str, typer.Option(help="What time does this event end? (HH:MM)")] = None,
+    color: Annotated[str, typer.Option(help="What color should this event be?")] = None,
 ):
     """
     Create an upcoming event
@@ -48,16 +52,19 @@ def create(
         if endDate is None:
             endDate = typer.prompt("When does this recurring event end? (YYYY-MM-DD)").replace("-", "")
 
-    if isRecurring == "y":
-        date = typer.prompt("What date is the first event? (YYYY-MM-DD)")
-    else:
-        date = typer.prompt("What date is the event? (YYYY-MM-DD)")
+    if date is None:
+        if isRecurring == "y":
+            date = typer.prompt("What date is the first event? (YYYY-MM-DD)")
+        else:
+            date = typer.prompt("What date is the event? (YYYY-MM-DD)")
 
-    startHrMin = typer.prompt("What time does this event start? (HH:MM)")
-    endHrMin = typer.prompt("What time does this event end? (HH:MM)")
+    if start is None:
+        start = typer.prompt("What time does this event start? (HH:MM)")
+    if end is None:
+        end = typer.prompt("What time does this event end? (HH:MM)")
 
-    startTime = f"{date}T{startHrMin}:00"
-    endTime = f"{date}T{endHrMin}:00"
+    startTime = f"{date}T{start}:00"
+    endTime = f"{date}T{end}:00"
 
     # color = [
     # inquirer.List('color',
@@ -67,16 +74,18 @@ def create(
     # ]
     # color = inquirer.prompt(color)
 
-    color = [
-        {
-            "type": "fuzzy",
-            "message": "What color should this event be?",
-            "choices": ['Lavendar', 'Sage', 'Grape', 'Flamingo', 'Banana', 'Tangerine', 'Peacock', 'Graphite', 'Blueberry', 'Basil', 'Tomato'],
-            "name": "color",
-        }
-    ]
+    if color is None:
+        color = [
+            {
+                "type": "fuzzy",
+                "message": "What color should this event be?",
+                "choices": ['Lavendar', 'Sage', 'Grape', 'Flamingo', 'Banana', 'Tangerine', 'Peacock', 'Graphite', 'Blueberry', 'Basil', 'Tomato'],
+                "name": "color",
+            }
+        ]
 
-    color = promptpy(color)
+        color = promptpy(color)
+        color = color["color"]
 
     print("Creating an event")
     print(startTime)
@@ -85,7 +94,7 @@ def create(
         service, 
         calendar_id, 
         summary if summary is None else summary, 
-        color["color"], 
+        color, 
         startTime, 
         endTime,
         isRecurring if isRecurring is None else isRecurring,
