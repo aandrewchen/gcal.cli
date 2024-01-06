@@ -21,7 +21,7 @@ app = typer.Typer()
 def create(
     summary: Annotated[str, typer.Option(help="What is the event?")] = None,
     isRecurring: Annotated[str, typer.Option(help="Is the event recurring? (y/n)")] = None,
-    days: Annotated[str, typer.Option(help="If recurring, what days does this event occur?")] = None,
+    days: Annotated[str, typer.Option(help="If recurring, what days does this event occur? ['day', 'day', 'etc.']")] = None,
     endDate: Annotated[str, typer.Option(help="If recurring, when does this recurring event end? (YYYY-MM-DD)")] = None,
     date: Annotated[str, typer.Option(help="What date is the (first) event? (YYYY-MM-DD)")] = None,
     start: Annotated[str, typer.Option(help="What time does this event start? (HH:MM)")] = None,
@@ -48,9 +48,16 @@ def create(
             ]
 
             days = inquirer.prompt(days)
+        else:
+
+            days = {
+                "days": [day.strip() for day in days.split(',')],
+            }
 
         if endDate is None:
             endDate = typer.prompt("When does this recurring event end? (YYYY-MM-DD)").replace("-", "")
+        else:
+            endDate = endDate.replace("-", "")
 
     if date is None:
         if isRecurring == "y":
