@@ -71,4 +71,3 @@ def create_event(calendar_id, summary, color, startTime, endTime, isRecurring, d
 
     event = service.events().insert(calendarId=calendar_id, body=event).execute()
     print("Event created: %s" % (event.get("htmlLink")))
-    # print(days)

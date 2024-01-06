@@ -8,9 +8,7 @@ import inquirer
 from InquirerPy import prompt as promptpy
 
 from utils.auth import get_auth
-from utils.get_event import get_upcoming_events
-from utils.get_event import convert_time
-from utils.get_event import convert_date
+from utils.get_event import get_upcoming_events, convert_time, convert_date
 from utils.create_event import create_event
 
 calendar_id = os.environ.get("CALENDAR_ID")
@@ -27,6 +25,7 @@ def create(
     start: Annotated[str, typer.Option(help="What time does this event start? (HH:MM)")] = None,
     end: Annotated[str, typer.Option(help="What time does this event end? (HH:MM)")] = None,
     color: Annotated[str, typer.Option(help="What color should this event be?")] = None,
+    confirm: Annotated[str, typer.Option(help="Are you sure you want to create this event? (y/n)")] = None,
 ):
     """
     Create an upcoming event with specified properties
@@ -86,19 +85,28 @@ def create(
         color = promptpy(color)
         color = color["color"]
 
-    print("Creating an event")
-    print(startTime)
-    print(endTime)
-    create_event(
-        calendar_id, 
-        summary if summary is None else summary, 
-        color, 
-        startTime, 
-        endTime,
-        isRecurring if isRecurring is None else isRecurring,
-        days["days"] if isRecurring == "y" else None,
-        endDate if isRecurring == "y" else None,
-    )
+    date = convert_date(start)
+    converted_start = convert_time(start)
+    converted_end = convert_time(end)
+
+    if confirm is None:
+        confirm = typer.prompt("Are you sure you want to create this event? (y/n) (" + converted_start + ' to ' + converted_end + ", " + date + " | " + summary + ")")
+
+    if confirm == "n":
+        print("Event creation cancelled")
+        return
+    else:
+        print("Creating an event")
+        create_event(
+            calendar_id, 
+            summary if summary is None else summary, 
+            color, 
+            startTime, 
+            endTime,
+            isRecurring if isRecurring is None else isRecurring,
+            days["days"] if isRecurring == "y" else None,
+            endDate if isRecurring == "y" else None,
+        )
 
 @app.command()
 def get(count: Annotated[str, typer.Argument()] = "1"):
