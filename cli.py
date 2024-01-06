@@ -11,6 +11,8 @@ from utils.auth import get_auth
 from utils.get_event import get_upcoming_events, convert_time, convert_date
 from utils.create_event import create_event
 
+from googleapiclient.errors import HttpError
+
 calendar_id = os.environ.get("CALENDAR_ID")
 
 app = typer.Typer()
@@ -111,7 +113,7 @@ def create(
 @app.command()
 def get(count: Annotated[str, typer.Argument()] = "1"):
     """
-    Get the specified number of upcoming events. If no number is specified, gets the next 10 events.
+    Get the specified number of upcoming events. If no number is specified, gets the next event.
     """
     if count == '1':
         print("Getting the next event in your calendar")
@@ -130,8 +132,47 @@ def get(count: Annotated[str, typer.Argument()] = "1"):
             print(converted_start + ' to ' + converted_end + ", " + date + " | " + event["summary"])
 
 @app.command()
-def main(name: str, lastname: Annotated[str, typer.Option(prompt=True)]):
-    print(f"Hello {name}, your lastname is: {lastname}")
+def list_id(count: Annotated[str, typer.Argument()] = "1"):
+    """
+    List the ID's of the specified number of upcoming events. If no number is specified, gets the next event.
+    """
+    if count == '1':
+        print("Getting the next event's ID in your calendar")
+    else:
+        print(f"Getting the upcoming {count} events' ID's in your calendar")
+    events = get_upcoming_events(calendar_id, count)
+    if not events:
+        print("No upcoming events found.")
+    else:
+        for event in events:
+            print("ID: " + event["id"] + " | " + event["summary"])
+
+@app.command()
+def delete(id: str):
+    """
+    Delete an event with the specified ID.
+    """
+    service = get_auth()
+    try:
+        event = service.events().get(calendarId=calendar_id, eventId=id).execute()
+        
+        start = event["start"].get("dateTime", event["start"].get("date"))
+        end = event["end"].get("dateTime", event["end"].get("date"))
+        date = convert_date(start)
+        converted_start = convert_time(start)
+        converted_end = convert_time(end)
+
+        confirm = typer.prompt("Are you sure you want to delete this event? (y/n) (" + converted_start + ' to ' + converted_end + ", " + date + " | " + event["summary"] + ")")
+
+        if confirm == "n":
+            print("Event deletion cancelled")
+            return
+        else:
+            print("Deleting event")
+            service.events().delete(calendarId=calendar_id, eventId=id).execute()
+            print("Event deleted")
+    except HttpError:
+        print("No event found with specified ID")
 
 @app.command()
 def test():
