@@ -8,7 +8,9 @@ import inquirer
 from InquirerPy import prompt as promptpy
 
 from utils.auth import get_auth
-from utils.get_event import get_upcoming_events, convert_time, convert_date
+from utils.get_event import get_upcoming_events
+from utils.get_event import convert_time
+from utils.get_event import convert_date
 from utils.create_event import create_event
 
 calendar_id = os.environ.get("CALENDAR_ID")
