@@ -1,8 +1,7 @@
 from utils.auth import get_auth
 
-service = get_auth()
-
 def create_event(calendar_id, summary, color, startTime, endTime, isRecurring, days, endDate):
+    service = get_auth()
     color_mapping = {
         "Lavendar": 1,
         "Sage": 2,
