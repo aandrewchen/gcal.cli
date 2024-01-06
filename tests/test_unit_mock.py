@@ -4,6 +4,10 @@ from typer.testing import CliRunner
 
 runner = CliRunner()
 
+def mock_get_auth():
+    pass
+
+@patch('cli.get_auth', new=mock_get_auth)
 @patch('cli.get_upcoming_events')
 def test_get_command_no_events(mock_get_upcoming_events):
     mock_get_upcoming_events.return_value = []
@@ -13,6 +17,7 @@ def test_get_command_no_events(mock_get_upcoming_events):
     assert result.exit_code == 0
     assert "No upcoming events found." in result.stdout
 
+@patch('cli.get_auth', new=mock_get_auth)
 @patch('cli.get_upcoming_events')
 def test_get_command_one_event(mock_get_upcoming_events):
     mock_get_upcoming_events.return_value = [
