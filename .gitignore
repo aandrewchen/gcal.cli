@@ -6,6 +6,8 @@ token.json
 
 credentials.json
 
+.coverage
+
 .env
 
 .DS_Store
