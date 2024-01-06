@@ -47,3 +47,18 @@ def test_create_command_with_arguments_recurring_days_no_confirm():
     result = runner.invoke(app, ["create", "--summary", "Test", "--isrecurring", "y", "--days", "Tuesday, Thursday", "--enddate", "2025-01-06", "--date", "2024-01-08", "--start", "07:15", "--end", "11:30", "--color", "Tomato", "--confirm", "n"])
     assert result.exit_code == 0
     assert "Event creation cancelled" in result.stdout
+
+def test_listid_command():
+    result = runner.invoke(app, ["list-id"])
+    assert result.exit_code == 0
+    assert "Getting the next event's ID in your calendar" in result.stdout
+
+def test_listid_command_with_arguments():
+    result = runner.invoke(app, ["list-id", "3"])
+    assert result.exit_code == 0
+    assert "Getting the upcoming 3 events' ID's in your calendar" in result.stdout
+
+def test_delete_command_with_arguments():
+    result = runner.invoke(app, ["delete", "abcd"])
+    assert result.exit_code == 0
+    assert "No event found with specified ID" in result.stdout
