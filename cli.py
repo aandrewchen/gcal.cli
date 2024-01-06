@@ -8,7 +8,7 @@ import inquirer
 from InquirerPy import prompt as promptpy
 
 from utils.auth import get_auth
-from utils.get_event import get_upcoming_events, convert_time
+from utils.get_event import get_upcoming_events, convert_time, convert_date
 from utils.create_event import create_event
 
 calendar_id = os.environ.get("CALENDAR_ID")
@@ -95,11 +95,14 @@ def create(
     )
 
 @app.command()
-def get(count: Annotated[str, typer.Argument()] = "10"):
+def get(count: Annotated[str, typer.Argument()] = "1"):
     """
     Get the specified number of upcoming events. If no number is specified, gets the next 10 events.
     """
-    print(f"Getting the upcoming {count} events")
+    if count == '1':
+        print("Getting the next event in your calendar")
+    else:
+        print(f"Getting the upcoming {count} events in your calendar")
     events = get_upcoming_events(service, calendar_id, count)
     if not events:
         print("No upcoming events found.")
@@ -107,9 +110,10 @@ def get(count: Annotated[str, typer.Argument()] = "10"):
         for event in events:
             start = event["start"].get("dateTime", event["start"].get("date"))
             end = event["end"].get("dateTime", event["end"].get("date"))
+            date = convert_date(start)
             converted_start = convert_time(start)
             converted_end = convert_time(end)
-            print(converted_start + ' to ' + converted_end, event["summary"])
+            print(converted_start + ' to ' + converted_end + ", " + date + " | " + event["summary"])
 
 @app.command()
 def main(name: str, lastname: Annotated[str, typer.Option(prompt=True)]):
