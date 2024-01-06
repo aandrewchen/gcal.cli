@@ -22,3 +22,8 @@ def convert_time(time):
     dt = parse(time)
     formatted_time = dt.strftime("%I:%M %p")
     return formatted_time
+
+def convert_date(time):
+    dt = parse(time)
+    formatted_date = dt.strftime('%Y-%m-%d')
+    return formatted_date
