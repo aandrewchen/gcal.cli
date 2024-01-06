@@ -106,8 +106,10 @@ def get(count: Annotated[str, typer.Argument()] = "10"):
     else:
         for event in events:
             start = event["start"].get("dateTime", event["start"].get("date"))
+            end = event["end"].get("dateTime", event["end"].get("date"))
             converted_start = convert_time(start)
-            print(converted_start, event["summary"])
+            converted_end = convert_time(end)
+            print(converted_start + ' to ' + converted_end, event["summary"])
 
 @app.command()
 def main(name: str, lastname: Annotated[str, typer.Option(prompt=True)]):
