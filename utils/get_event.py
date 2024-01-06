@@ -1,7 +1,11 @@
+from utils.auth import get_auth
+
 from dateutil.parser import parse
 import datetime
 
-def get_upcoming_events(service, calendar_id, maxResults):
+service = get_auth()
+
+def get_upcoming_events(calendar_id, maxResults):
    now = datetime.datetime.utcnow().isoformat() + "Z"
    events_result = (
        service.events()

@@ -17,8 +17,6 @@ calendar_id = os.environ.get("CALENDAR_ID")
 
 app = typer.Typer()
 
-service = get_auth()
-
 @app.command()
 def create(
     summary: Annotated[str, typer.Option(help="What is the event?")] = None,
@@ -85,7 +83,6 @@ def create(
     print(startTime)
     print(endTime)
     create_event(
-        service, 
         calendar_id, 
         summary if summary is None else summary, 
         color, 
@@ -105,7 +102,7 @@ def get(count: Annotated[str, typer.Argument()] = "1"):
         print("Getting the next event in your calendar")
     else:
         print(f"Getting the upcoming {count} events in your calendar")
-    events = get_upcoming_events(service, calendar_id, count)
+    events = get_upcoming_events(calendar_id, count)
     if not events:
         print("No upcoming events found.")
     else:
