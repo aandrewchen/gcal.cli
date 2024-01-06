@@ -23,6 +23,5 @@ jobs:
           python -m pip install pytest
           pip install -r requirements.txt
 
-      - name: Hello World
-        run: |
-          echo "Hello World"
+      - name: Run unit tests
+        run: pytest tests/test_unit_mock.py
