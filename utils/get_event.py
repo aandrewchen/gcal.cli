@@ -1,3 +1,4 @@
+from dateutil.parser import parse
 import datetime
 
 def get_upcoming_events(service, calendar_id, maxResults):
@@ -16,3 +17,8 @@ def get_upcoming_events(service, calendar_id, maxResults):
 
    events = events_result.get("items", [])
    return events
+
+def convert_time(time):
+    dt = parse(time)
+    formatted_time = dt.strftime("%I:%M %p")
+    return formatted_time

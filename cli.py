@@ -8,7 +8,7 @@ import inquirer
 from InquirerPy import prompt as promptpy
 
 from utils.auth import get_auth
-from utils.get_event import get_upcoming_events
+from utils.get_event import get_upcoming_events, convert_time
 from utils.create_event import create_event
 
 calendar_id = os.environ.get("CALENDAR_ID")
@@ -29,7 +29,7 @@ def create(
     color: Annotated[str, typer.Option(help="What color should this event be?")] = None,
 ):
     """
-    Create an upcoming event
+    Create an upcoming event with specified properties
     """
     if summary is None:
         summary = typer.prompt("What are you doing?")
@@ -66,14 +66,6 @@ def create(
     startTime = f"{date}T{start}:00"
     endTime = f"{date}T{end}:00"
 
-    # color = [
-    # inquirer.List('color',
-    #             message="What color should this event be?",
-    #             choices=['Lavendar', 'Sage', 'Grape', 'Flamingo', 'Banana', 'Tangerine', 'Peacock', 'Graphite', 'Blueberry', 'Basil', 'Tomato'],
-    #         ),
-    # ]
-    # color = inquirer.prompt(color)
-
     if color is None:
         color = [
             {
@@ -105,7 +97,7 @@ def create(
 @app.command()
 def get(count: Annotated[str, typer.Argument()] = "10"):
     """
-    Get the specified number of upcoming events
+    Get the specified number of upcoming events. If no number is specified, gets the next 10 events.
     """
     print(f"Getting the upcoming {count} events")
     events = get_upcoming_events(service, calendar_id, count)
@@ -114,7 +106,8 @@ def get(count: Annotated[str, typer.Argument()] = "10"):
     else:
         for event in events:
             start = event["start"].get("dateTime", event["start"].get("date"))
-            print(start, event["summary"])
+            converted_start = convert_time(start)
+            print(converted_start, event["summary"])
 
 @app.command()
 def main(name: str, lastname: Annotated[str, typer.Option(prompt=True)]):
