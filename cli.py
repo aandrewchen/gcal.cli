@@ -11,6 +11,7 @@ from InquirerPy import prompt as promptpy
 from utils.auth import get_auth
 from utils.get_event import get_upcoming_events, convert_time, convert_date
 from utils.create_event import create_event
+from utils.format_time import format_time
 
 from googleapiclient.errors import HttpError
 
@@ -108,7 +109,7 @@ def create(
             color, 
             startTime, 
             endTime,
-            isRecurring if isRecurring is None else isRecurring,
+            isRecurring,
             days["days"] if isRecurring == "y" else None,
             endDate if isRecurring == "y" else None,
         )
@@ -180,7 +181,7 @@ def delete(id: str):
 @app.command()
 def start():
     """
-    Start a timer for an event.
+    Start a timer for a quick event.
     """
     start_time = time.time()
     with open(start_time_file, 'w') as f:
@@ -190,7 +191,7 @@ def start():
 @app.command()
 def stop(event: Annotated[str, typer.Argument()] = None):
     """
-    Stop the timer for an event and add event details.
+    Stop the timer for adding a quick event.
     """
     if not os.path.exists(start_time_file):
         print("Timer was never started")
@@ -206,6 +207,8 @@ def stop(event: Annotated[str, typer.Argument()] = None):
         elapsed_time = "{:02}:{:02}:{:02}".format(hours, minutes, seconds)
         print("Elapsed time: " + elapsed_time)
     
+    startTime, endTime = format_time(start_time, end_time)
+
     if event is None:   
         event = [
                 {
@@ -218,8 +221,29 @@ def stop(event: Annotated[str, typer.Argument()] = None):
 
         event = promptpy(event)
         event = event["event"]
-    
-    print(event + " for " + elapsed_time)
+
+    color_mapping = {
+        "Work": "Lavendar",
+        "Homework": "Sage",
+        "Study": "Grape",
+        "Exercise": "Flamingo",
+        "Break": "Banana",
+        "Appointment": "Tangerine",
+        "Other": "Peacock",
+    }
+
+    color = color_mapping[event]
+
+    create_event(
+        calendar_id, 
+        event, 
+        color, 
+        startTime, 
+        endTime,
+        "n",
+        None,
+        None,
+    )
 
 @app.command()
 def test():
