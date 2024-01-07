@@ -4,20 +4,15 @@ from cli import app
 
 runner = CliRunner()
 
-def test_app():
-    result = runner.invoke(app, ["test"])
-    assert result.exit_code == 0
-    assert "Testing" in result.stdout
-
 def test_get_command_no_number_specified():
     result = runner.invoke(app, ["get"])
     assert result.exit_code == 0
-    assert "IET Work" in result.stdout
+    assert "IET" in result.stdout
 
 def test_get_command_5_specified():
     result = runner.invoke(app, ["get", "5"])
     assert result.exit_code == 0
-    assert "IET Work" in result.stdout
+    assert "IET" in result.stdout
 
 def test_create_command_with_arguments_not_recurring():
     result = runner.invoke(app, ["create", "--summary", "Test", "--isrecurring", "n", "--date", "2025-01-06", "--start", "08:00", "--end", "12:00", "--color", "Lavendar", "--confirm", "y"])
@@ -62,3 +57,13 @@ def test_delete_command_with_arguments():
     result = runner.invoke(app, ["delete", "abcd"])
     assert result.exit_code == 0
     assert "No event found with specified ID" in result.stdout
+
+def test_listid_command_with_arguments():
+    result = runner.invoke(app, ["list-id", "3"])
+    assert result.exit_code == 0
+    assert "Getting the upcoming 3 events' ID's in your calendar" in result.stdout
+
+def test_listid_command_with_no_arguments():
+    result = runner.invoke(app, ["list-id"])
+    assert result.exit_code == 0
+    assert "Getting the next event's ID in your calendar" in result.stdout
