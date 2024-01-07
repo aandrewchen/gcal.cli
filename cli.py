@@ -189,9 +189,9 @@ def start():
     print("Timer started")
 
 @app.command()
-def stop(event: Annotated[str, typer.Argument()] = None):
+def stop(event: Annotated[str, typer.Argument(help="What quick event do you want to add? (Work, Homework, Study, Exercise, Break, Appointment, Other)")] = None):
     """
-    Stop the timer for adding a quick event.
+    Stop the timer and add a quick event.
     """
     if not os.path.exists(start_time_file):
         print("Timer was never started")
@@ -244,10 +244,6 @@ def stop(event: Annotated[str, typer.Argument()] = None):
         None,
         None,
     )
-
-@app.command()
-def test():
-    print("Testing")
 
 if __name__ == "__main__":
     app()
