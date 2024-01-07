@@ -1,4 +1,5 @@
 import os
+import time
 
 import typer
 from typing_extensions import Annotated
@@ -16,6 +17,8 @@ from googleapiclient.errors import HttpError
 calendar_id = os.environ.get("CALENDAR_ID")
 
 app = typer.Typer()
+
+start_time_file = "start_time.txt"
 
 @app.command()
 def create(
@@ -173,6 +176,50 @@ def delete(id: str):
             print("Event deleted")
     except HttpError:
         print("No event found with specified ID")
+
+@app.command()
+def start():
+    """
+    Start a timer for an event.
+    """
+    start_time = time.time()
+    with open(start_time_file, 'w') as f:
+        f.write(str(start_time))
+    print("Timer started")
+
+@app.command()
+def stop(event: Annotated[str, typer.Argument()] = None):
+    """
+    Stop the timer for an event and add event details.
+    """
+    if not os.path.exists(start_time_file):
+        print("Timer was never started")
+        return
+    else:
+        with open(start_time_file, 'r') as f:
+            start_time = float(f.read())
+        os.remove(start_time_file)
+        end_time = time.time()
+        elapsed_time = int(end_time - start_time)
+        hours, remainder = divmod(elapsed_time, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        elapsed_time = "{:02}:{:02}:{:02}".format(hours, minutes, seconds)
+        print("Elapsed time: " + elapsed_time)
+    
+    if event is None:   
+        event = [
+                {
+                    "type": "fuzzy",
+                    "message": "What is the event?",
+                    "choices": ['Work', 'Homework', 'Study', 'Exercise', 'Break', 'Appointment', 'Other'],
+                    "name": "event",
+                }
+            ]
+
+        event = promptpy(event)
+        event = event["event"]
+    
+    print(event + " for " + elapsed_time)
 
 @app.command()
 def test():
