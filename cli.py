@@ -12,7 +12,8 @@ import inquirer
 from InquirerPy import prompt as promptpy
 
 from utils.auth import get_auth
-from utils.get_event import get_upcoming_events, convert_time, convert_date
+from utils.get_event import get_upcoming_events, get_event_by_id, convert_time, convert_date
+from utils.delete_event import delete_event_by_id
 from utils.create_event import create_event
 from utils.format_time import format_time
 
@@ -158,28 +159,32 @@ def list_id(count: Annotated[str, typer.Argument()] = "1"):
             print("ID: " + event["id"] + " | " + event["summary"])
 
 @app.command()
-def delete(id: str):
+def delete(
+    id: str, 
+    confirm: Annotated[str, typer.Option(help="Are you sure you want to create this event? (y/n)")] = None
+):
     """
     Delete an event with the specified ID.
     """
-    service = get_auth()
     try:
-        event = service.events().get(calendarId=calendar_id, eventId=id).execute()
+        event = get_event_by_id(calendar_id, id)
         
         start = event["start"].get("dateTime", event["start"].get("date"))
         end = event["end"].get("dateTime", event["end"].get("date"))
+
         date = convert_date(start)
         converted_start = convert_time(start)
         converted_end = convert_time(end)
 
-        confirm = typer.prompt("Are you sure you want to delete this event? (y/n) (" + converted_start + ' to ' + converted_end + ", " + date + " | " + event["summary"] + ")")
+        if confirm is None:
+            confirm = typer.prompt("Are you sure you want to delete this event? (y/n) (" + converted_start + ' to ' + converted_end + ", " + date + " | " + event["summary"] + ")")
 
         if confirm == "n":
             print("Event deletion cancelled")
             return
         else:
             print("Deleting event")
-            service.events().delete(calendarId=calendar_id, eventId=id).execute()
+            delete_event_by_id(calendar_id, id)
             print("Event deleted")
     except HttpError:
         print("No event found with specified ID")
