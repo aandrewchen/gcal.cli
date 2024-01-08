@@ -21,6 +21,11 @@ def get_upcoming_events(calendar_id, maxResults):
    events = events_result.get("items", [])
    return events
 
+def get_event_by_id(calendar_id, id):
+    service = get_auth()
+    event = service.events().get(calendarId=calendar_id, eventId=id).execute()
+    return event
+
 def convert_time(time):
     dt = parse(time)
     formatted_time = dt.strftime("%I:%M %p")
