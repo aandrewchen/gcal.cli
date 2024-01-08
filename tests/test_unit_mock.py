@@ -93,3 +93,54 @@ def test_listid_command_3_events(mock_get_upcoming_events):
     assert "ID: 1 | Test" in result.stdout
     assert "ID: 2 | Test 2" in result.stdout
     assert "ID: 3 | Test 3" in result.stdout
+
+@patch('cli.get_auth', new=mock_get_auth)
+@patch('cli.get_event_by_id')
+@patch('cli.delete_event_by_id')
+@patch('cli.convert_date')
+@patch('cli.convert_time')
+def test_delete_command_with_test_id(mock_convert_time, mock_convert_date, mock_delete_event_by_id, mock_get_event_by_id):
+    mock_get_event_by_id.return_value = {
+        'summary': 'Test',
+        'id': '1',
+        'start': {
+            'dateTime': '2022-01-01T00:00:00'
+        },
+        'end': {
+            'dateTime': '2022-01-01T01:00:00'
+        }
+    }
+    mock_delete_event_by_id.return_value = None
+    mock_convert_date.return_value = None
+    mock_convert_time.return_value = None
+
+    result = runner.invoke(app, ["delete", "1234", "--confirm", "y"])
+
+    assert result.exit_code == 0
+    assert "Deleting event" in result.stdout
+    assert "Event deleted" in result.stdout
+
+@patch('cli.get_auth', new=mock_get_auth)
+@patch('cli.get_event_by_id')
+@patch('cli.delete_event_by_id')
+@patch('cli.convert_date')
+@patch('cli.convert_time')
+def test_delete_command_with_test_id(mock_convert_time, mock_convert_date, mock_delete_event_by_id, mock_get_event_by_id):
+    mock_get_event_by_id.return_value = {
+        'summary': 'Test',
+        'id': '1',
+        'start': {
+            'dateTime': '2022-01-01T00:00:00'
+        },
+        'end': {
+            'dateTime': '2022-01-01T01:00:00'
+        }
+    }
+    mock_delete_event_by_id.return_value = None
+    mock_convert_date.return_value = None
+    mock_convert_time.return_value = None
+
+    result = runner.invoke(app, ["delete", "1234", "--confirm", "n"])
+
+    assert result.exit_code == 0
+    assert "Event deletion cancelled" in result.stdout
