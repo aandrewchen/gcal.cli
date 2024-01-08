@@ -5,6 +5,7 @@ import typer
 from typing_extensions import Annotated
 from rich import print as rprint
 from rich.console import Console
+from rich.table import Table
 from rich.text import Text
 
 import inquirer
@@ -122,7 +123,10 @@ def create(
         )
 
 @app.command()
-def get(count: Annotated[str, typer.Argument()] = "1"):
+def get(
+    count: Annotated[str, typer.Argument()] = "1",
+    table: Annotated[str, typer.Option(help="Display events in a table? (y/n)")] = None,
+):
     """
     Get the specified number of upcoming events. If no number is specified, gets the next event.
     """
@@ -134,13 +138,21 @@ def get(count: Annotated[str, typer.Argument()] = "1"):
     if not events:
         print("No upcoming events found.")
     else:
+        if table == "y":
+            console = Console()
+            tb = Table("Event", "Time", "Date")
         for event in events:
             start = event["start"].get("dateTime", event["start"].get("date"))
             end = event["end"].get("dateTime", event["end"].get("date"))
             date = convert_date(start)
             converted_start = convert_time(start)
             converted_end = convert_time(end)
-            print(converted_start + ' to ' + converted_end + ", " + date + " | " + event["summary"])
+            if table is None or "n":
+                print(converted_start + ' to ' + converted_end + ", " + date + " | " + event["summary"])
+            else:
+                tb.add_row(event["summary"], converted_start + ' to ' + converted_end, date)
+        if table == "y":
+            console.print(tb)
 
 @app.command()
 def list_id(count: Annotated[str, typer.Argument()] = "1"):
@@ -177,7 +189,10 @@ def delete(
         converted_end = convert_time(end)
 
         if confirm is None:
-            confirm = typer.prompt("Are you sure you want to delete this event? (y/n) (" + converted_start + ' to ' + converted_end + ", " + date + " | " + event["summary"] + ")")
+            console = Console()
+            prompt_text = Text("Are you sure you want to delete this event? (y/n) (" + converted_start + ' to ' + converted_end + ", " + date + " | " + event["summary"] + ")", style="bold red")
+            console.print(prompt_text, end="")
+            confirm = typer.prompt("")
 
         if confirm == "n":
             print("Event deletion cancelled")
@@ -255,13 +270,6 @@ def stop(event: Annotated[str, typer.Argument(help="What quick event do you want
         None,
         None,
     )
-
-@app.command()
-def test():
-    """
-    Test command
-    """
-    rprint("[bold red]Alert![/bold red] [green]Portal gun[/green] shooting! :boom:")
 
 if __name__ == "__main__":
     app()
