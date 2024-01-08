@@ -125,7 +125,7 @@ def create(
 @app.command()
 def get(
     count: Annotated[str, typer.Argument(help="How many upcoming events do you want to get? 🔢", show_default=False)] = "1",
-    table: Annotated[str, typer.Option(help="Display events in a table? [italic bold](y/n)[/italic bold] 📊", show_default="No")] = None,
+    table: Annotated[str, typer.Option(help="Display events in a table? [italic bold](y/n)[/italic bold] 📊", show_default="n")] = "n",
 ):
     """
     [yellow bold]Get[/yellow bold] the specified number of upcoming events. If no number is specified, gets the next event 📋
@@ -147,7 +147,7 @@ def get(
             date = convert_date(start)
             converted_start = convert_time(start)
             converted_end = convert_time(end)
-            if table is None or "n":
+            if table == "n":
                 print(converted_start + ' to ' + converted_end + ", " + date + " | " + event["summary"])
             else:
                 tb.add_row(event["summary"], converted_start + ' to ' + converted_end, date)
