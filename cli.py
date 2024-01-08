@@ -28,15 +28,15 @@ start_time_file = "start_time.txt"
 
 @app.command()
 def create(
-    summary: Annotated[str, typer.Option(help="What is the event?")] = None,
-    isRecurring: Annotated[str, typer.Option(help="Is the event recurring? (y/n)")] = None,
-    days: Annotated[str, typer.Option(help="If recurring, what days does this event occur? ['day', 'day', 'etc.']")] = None,
-    endDate: Annotated[str, typer.Option(help="If recurring, when does this recurring event end? (YYYY-MM-DD)")] = None,
-    date: Annotated[str, typer.Option(help="What date is the (first) event? (YYYY-MM-DD)")] = None,
-    start: Annotated[str, typer.Option(help="What time does this event start? (HH:MM)")] = None,
-    end: Annotated[str, typer.Option(help="What time does this event end? (HH:MM)")] = None,
-    color: Annotated[str, typer.Option(help="What color should this event be?")] = None,
-    confirm: Annotated[str, typer.Option(help="Are you sure you want to create this event? (y/n)")] = None,
+    summary: Annotated[str, typer.Option(help="What is the event? 🤔", show_default=False)] = None,
+    isRecurring: Annotated[str, typer.Option(help="Is the event recurring? (y/n)", show_default=False)] = None,
+    days: Annotated[str, typer.Option(help="If recurring, what days does this event occur? ['day', 'day', 'etc.']", show_default=False)] = None,
+    endDate: Annotated[str, typer.Option(help="If recurring, when does this recurring event end? (YYYY-MM-DD)", show_default=False)] = None,
+    date: Annotated[str, typer.Option(help="What date is the (first) event? (YYYY-MM-DD)", show_default=False)] = None,
+    start: Annotated[str, typer.Option(help="What time does this event start? (HH:MM)", show_default=False)] = None,
+    end: Annotated[str, typer.Option(help="What time does this event end? (HH:MM)", show_default=False)] = None,
+    color: Annotated[str, typer.Option(help="What color should this event be?", show_default=False)] = None,
+    confirm: Annotated[str, typer.Option(help="Are you sure you want to create this event? (y/n)", show_default=False)] = None,
 ):
     """
     Create an upcoming event with specified properties
@@ -125,7 +125,7 @@ def create(
 @app.command()
 def get(
     count: Annotated[str, typer.Argument()] = "1",
-    table: Annotated[str, typer.Option(help="Display events in a table? (y/n)")] = None,
+    table: Annotated[str, typer.Option(help="Display events in a table? (y/n)", show_default="No")] = None,
 ):
     """
     Get the specified number of upcoming events. If no number is specified, gets the next event.
@@ -173,7 +173,7 @@ def list_id(count: Annotated[str, typer.Argument()] = "1"):
 @app.command()
 def delete(
     id: str, 
-    confirm: Annotated[str, typer.Option(help="Are you sure you want to create this event? (y/n)")] = None
+    confirm: Annotated[str, typer.Option(help="Are you sure you want to create this event? (y/n)", show_default=False)] = None
 ):
     """
     Delete an event with the specified ID.
@@ -215,7 +215,7 @@ def start():
     print("Timer started")
 
 @app.command()
-def stop(event: Annotated[str, typer.Argument(help="What quick event do you want to add? (Work, Homework, Study, Exercise, Break, Appointment, Other)")] = None):
+def stop(event: Annotated[str, typer.Argument(help="What quick event do you want to add? (Work, Homework, Study, Exercise, Break, Appointment, Other)", metavar="✨EVENT✨", show_default=False)] = None):
     """
     Stop the timer and add a quick event.
     """
