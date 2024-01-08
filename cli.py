@@ -22,24 +22,24 @@ from googleapiclient.errors import HttpError
 
 calendar_id = os.environ.get("CALENDAR_ID")
 
-app = typer.Typer()
+app = typer.Typer(help="📅 CLI Tool to automate procedures & manage Google Calendar 📅", rich_markup_mode="rich", epilog="Made with :heart: by Andrew Chen")
 
 start_time_file = "start_time.txt"
 
 @app.command()
 def create(
-    summary: Annotated[str, typer.Option(help="What is the event? 🤔", show_default=False)] = None,
-    isRecurring: Annotated[str, typer.Option(help="Is the event recurring? (y/n)", show_default=False)] = None,
-    days: Annotated[str, typer.Option(help="If recurring, what days does this event occur? ['day', 'day', 'etc.']", show_default=False)] = None,
-    endDate: Annotated[str, typer.Option(help="If recurring, when does this recurring event end? (YYYY-MM-DD)", show_default=False)] = None,
-    date: Annotated[str, typer.Option(help="What date is the (first) event? (YYYY-MM-DD)", show_default=False)] = None,
-    start: Annotated[str, typer.Option(help="What time does this event start? (HH:MM)", show_default=False)] = None,
-    end: Annotated[str, typer.Option(help="What time does this event end? (HH:MM)", show_default=False)] = None,
-    color: Annotated[str, typer.Option(help="What color should this event be?", show_default=False)] = None,
-    confirm: Annotated[str, typer.Option(help="Are you sure you want to create this event? (y/n)", show_default=False)] = None,
+    summary: Annotated[str, typer.Option(help="What is the event? 📝", show_default=False)] = None,
+    isRecurring: Annotated[str, typer.Option(help="Is the event recurring? [italic bold](y/n)[/italic bold] 🔁", show_default=False)] = None,
+    days: Annotated[str, typer.Option(help="If recurring, what days does this event occur? [italic bold]['day', 'day', 'etc.'][/italic bold] 📆", show_default=False)] = None,
+    endDate: Annotated[str, typer.Option(help="If recurring, when does this recurring event end? [italic bold](YYYY-MM-DD)[/italic bold] ✋", show_default=False)] = None,
+    date: Annotated[str, typer.Option(help="What date is the (first) event? [italic bold](YYYY-MM-DD)[/italic bold] 🗓️", show_default=False)] = None,
+    start: Annotated[str, typer.Option(help="What time does this event start? [italic bold](HH:MM)[/italic bold] ⏳", show_default=False)] = None,
+    end: Annotated[str, typer.Option(help="What time does this event end? [italic bold](HH:MM)[/italic bold] ⌛️", show_default=False)] = None,
+    color: Annotated[str, typer.Option(help="What color should this event be? 🎨", show_default=False)] = None,
+    confirm: Annotated[str, typer.Option(help="Are you sure you want to create this event? [italic bold](y/n)[/italic bold] ✅", show_default=False)] = None,
 ):
     """
-    Create an upcoming event with specified properties
+    [green bold]Create[/green bold] an upcoming event with specified properties :sparkles:
     """
     if summary is None:
         summary = typer.prompt("What are you doing?")
@@ -124,11 +124,11 @@ def create(
 
 @app.command()
 def get(
-    count: Annotated[str, typer.Argument()] = "1",
-    table: Annotated[str, typer.Option(help="Display events in a table? (y/n)", show_default="No")] = None,
+    count: Annotated[str, typer.Argument(help="How many upcoming events do you want to get? 🔢", show_default=False)] = "1",
+    table: Annotated[str, typer.Option(help="Display events in a table? [italic bold](y/n)[/italic bold] 📊", show_default="No")] = None,
 ):
     """
-    Get the specified number of upcoming events. If no number is specified, gets the next event.
+    [yellow bold]Get[/yellow bold] the specified number of upcoming events. If no number is specified, gets the next event 📋
     """
     if count == '1':
         print("Getting the next event in your calendar")
@@ -155,9 +155,9 @@ def get(
             console.print(tb)
 
 @app.command()
-def list_id(count: Annotated[str, typer.Argument()] = "1"):
+def list_id(count: Annotated[str, typer.Argument(help="How many IDs do you want to list? 📋", show_default=False)] = "1"):
     """
-    List the ID's of the specified number of upcoming events. If no number is specified, gets the next event.
+    [yellow bold]List[/yellow bold] the ID's of the specified number of upcoming events. If no number is specified, gets the next event 🖊️
     """
     if count == '1':
         print("Getting the next event's ID in your calendar")
@@ -172,11 +172,11 @@ def list_id(count: Annotated[str, typer.Argument()] = "1"):
 
 @app.command()
 def delete(
-    id: str, 
-    confirm: Annotated[str, typer.Option(help="Are you sure you want to create this event? (y/n)", show_default=False)] = None
+    id: Annotated[str, typer.Argument(help="The ID of the event to be [red]deleted[/red] 🗑️", show_default=False)], 
+    confirm: Annotated[str, typer.Option(help="Are you sure you want to delete this event? [italic bold](y/n)[/italic bold] :boom:", show_default=False)] = None
 ):
     """
-    Delete an event with the specified ID.
+    [red bold]Delete[/red bold] an event with the specified ID 🗑️
     """
     try:
         event = get_event_by_id(calendar_id, id)
@@ -207,7 +207,7 @@ def delete(
 @app.command()
 def start():
     """
-    Start a timer for a quick event.
+    [green bold]Start[/green bold] a timer for a quick event ⏱️
     """
     start_time = time.time()
     with open(start_time_file, 'w') as f:
@@ -215,9 +215,9 @@ def start():
     print("Timer started")
 
 @app.command()
-def stop(event: Annotated[str, typer.Argument(help="What quick event do you want to add? (Work, Homework, Study, Exercise, Break, Appointment, Other)", metavar="✨EVENT✨", show_default=False)] = None):
+def stop(event: Annotated[str, typer.Argument(help="What quick event do you want to add? [bold italic](Work, Homework, Study, Exercise, Break, Appointment, Other)[/bold italic] 🗓️", metavar="✨EVENT✨", show_default=False)] = None):
     """
-    Stop the timer and add a quick event.
+    [red bold]Stop[/red bold] the timer and add a quick event 📝
     """
     if not os.path.exists(start_time_file):
         print("Timer was never started")
