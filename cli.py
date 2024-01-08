@@ -3,6 +3,9 @@ import time
 
 import typer
 from typing_extensions import Annotated
+from rich import print as rprint
+from rich.console import Console
+from rich.text import Text
 
 import inquirer
 
@@ -96,7 +99,9 @@ def create(
     converted_end = convert_time(end)
 
     if confirm is None:
-        confirm = typer.prompt("Are you sure you want to create this event? (y/n) (" + converted_start + ' to ' + converted_end + ", " + date + " | " + summary + ")")
+        console = Console()
+        prompt_text = Text("Are you sure you want to create this event? (y/n) (" + converted_start + ' to ' + converted_end + ", " + date + " | " + summary + ")", style="bold red")
+        confirm = typer.prompt(console.print(prompt_text, end=""))
 
     if confirm == "n":
         print("Event creation cancelled")
@@ -244,6 +249,13 @@ def stop(event: Annotated[str, typer.Argument(help="What quick event do you want
         None,
         None,
     )
+
+@app.command()
+def test():
+    """
+    Test command
+    """
+    rprint("[bold red]Alert![/bold red] [green]Portal gun[/green] shooting! :boom:")
 
 if __name__ == "__main__":
     app()
