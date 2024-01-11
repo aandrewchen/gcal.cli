@@ -35,7 +35,7 @@ python cli.py get 3 --table y
 python cli.py create
 ```
 
-#### Delete an event
+#### Delete an event by ID
 ```bash
 python cli.py delete "id"
 ```
