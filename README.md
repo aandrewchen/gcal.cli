@@ -45,6 +45,7 @@ Replace "id" with the ID of the event you want to delete.
 ```bash
 python cli.py list_id
 ```
+Optionally put in count
 
 ## Testing
 You can run the tests with Pytest:
