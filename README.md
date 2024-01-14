@@ -38,17 +38,27 @@ python cli.py create
 ```
 
 #### List ID of the next event in your calendar
-*Optionally put in count to get the specified number of upcoming events*
+*Optionally include count to get the specified number of upcoming events*
 ```bash
-python cli.py list-id
+python cli.py list-id <count>
 ```
 
 #### Delete an event by ID
-*Replace <id> with the ID of the event you want to delete*
+*Replace required id with the ID of the event you want to delete*
 ```bash
 python cli.py delete <id>
 ```
 ![Screenshot 2024-01-14 at 3 24 58 AM](https://github.com/aandrewchen/gcal.cli/assets/125727520/37438305-0044-4f4a-99c2-27bc9e41dabc)
+
+#### Start a timer for a quick event
+```bash
+python cli.py start
+```
+
+#### Stop timer
+```bash
+python cli.py stop
+```
 
 ## Testing
 You can run the tests with Pytest:
