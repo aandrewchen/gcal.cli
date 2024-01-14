@@ -23,26 +23,26 @@ pip install -r requirements.txt
 ## Usage
 You can use the `--help` flag with any command to get information about how to use it.
 
+![Screenshot 2024-01-14 at 3 11 58 AM](https://github.com/aandrewchen/gcal.cli/assets/125727520/0369b174-f370-4634-8ba2-426b77185991)
+
 ### Here are some examples of how to use gcal.cli:
 
 #### Get the next 3 events and display them in a table
 ```bash
 python cli.py get 3 --table y
 ```
-Getting the upcoming 3 events in your calendar
-┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
-┃ Event    ┃ Time                 ┃ Date       ┃
-┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
-│ Gym      │ 10:00 AM to 02:00 PM │ 2024-01-14 │
-│ Class    │ 02:30 PM to 03:30 PM │ 2024-01-14 │
-│ Dinner   │ 04:00 PM to 05:30 PM │ 2024-01-14 │
-└──────────┴──────────────────────┴────────────┘
+![Screenshot 2024-01-14 at 3 09 31 AM](https://github.com/aandrewchen/gcal.cli/assets/125727520/211789ec-b5a7-4c59-b4e8-650c653479f1)
 
 #### Create a new event
 ```bash
 python cli.py create
 ```
 
+#### List ID of an event
+```bash
+python cli.py list_id
+```
+Optionally put in count
 
 #### Delete an event by ID
 ```bash
@@ -50,11 +50,6 @@ python cli.py delete "id"
 ```
 Replace "id" with the ID of the event you want to delete.
 
-#### List ID of an event
-```bash
-python cli.py list_id
-```
-Optionally put in count
 
 ## Testing
 You can run the tests with Pytest:
