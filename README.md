@@ -29,11 +29,20 @@ You can use the `--help` flag with any command to get information about how to u
 ```bash
 python cli.py get 3 --table y
 ```
+Getting the upcoming 3 events in your calendar
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃ Event    ┃ Time                 ┃ Date       ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ Gym      │ 10:00 AM to 02:00 PM │ 2024-01-14 │
+│ Class    │ 02:30 PM to 03:30 PM │ 2024-01-14 │
+│ Dinner   │ 04:00 PM to 05:30 PM │ 2024-01-14 │
+└──────────┴──────────────────────┴────────────┘
 
 #### Create a new event
 ```bash
 python cli.py create
 ```
+
 
 #### Delete an event by ID
 ```bash
