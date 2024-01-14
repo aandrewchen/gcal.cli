@@ -4,11 +4,11 @@ gcal.cli is a command-line interface tool built with Python3, Pytest, Typer, and
 
 ## Features
 
-- Create, read, update, and delete Google Calendar events.
-- List upcoming events.
-- Support for recurring events.
-- Display events in a table format.
-- Start a timer for a quick event.
+- **Create, read, update, and delete** Google Calendar events 📅
+- **List** upcoming events 🖊️
+- **Support** for recurring events ✅
+- **Display** events in a table format 📋
+- **Start** a timer for a quick event ⏱️ 
 
 ## Installation
 
@@ -22,7 +22,6 @@ pip install -r requirements.txt
 
 ## Usage
 You can use the `--help` flag with any command to get information about how to use it.
-
 ![Screenshot 2024-01-14 at 3 11 58 AM](https://github.com/aandrewchen/gcal.cli/assets/125727520/0369b174-f370-4634-8ba2-426b77185991)
 
 ### Here are some examples of how to use gcal.cli:
@@ -38,23 +37,27 @@ python cli.py get 3 --table y
 python cli.py create
 ```
 
-#### List ID of an event
+#### List ID of the next event in your calendar
+*Optionally put in count to get the specified number of upcoming events*
 ```bash
-python cli.py list_id
+python cli.py list-id
 ```
-Optionally put in count
 
 #### Delete an event by ID
+*Replace <id> with the ID of the event you want to delete*
 ```bash
-python cli.py delete "id"
+python cli.py delete <id>
 ```
-Replace "id" with the ID of the event you want to delete.
-
+![Screenshot 2024-01-14 at 3 24 58 AM](https://github.com/aandrewchen/gcal.cli/assets/125727520/37438305-0044-4f4a-99c2-27bc9e41dabc)
 
 ## Testing
 You can run the tests with Pytest:
 ```bash
 pytest
+```
+To see test converage, run:
+```bash
+coverage run -m pytest
 ```
 
 ## Contributing
