@@ -102,7 +102,7 @@ def create(
 
     if confirm is None:
         console = Console()
-        prompt_text = Text("Are you sure you want to create this event? (y/n) (" + converted_start + ' to ' + converted_end + ", " + date + " | " + summary + ")", style="bold red")
+        prompt_text = Text("Are you sure you want to create this event? (y/n) (" + converted_start + ' to ' + converted_end + ", " + date + " | " + summary + ")", style="bold green")
         console.print(prompt_text, end="")
         confirm = typer.prompt("")
 
