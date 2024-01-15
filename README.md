@@ -1,6 +1,6 @@
 # googleCal.cli
 
-gcal.cli is a command-line interface tool built with Python3, Pytest, Typer, and the Google Calendar API. It's designed to automate procedures and manage Google Calendar events.
+googleCal.cli is a command-line interface tool built with Python3, Pytest, Typer, Google client library, and the Google Calendar API. It's designed to automate procedures and manage Google Calendar events.
 
 ## Features
 
@@ -16,38 +16,48 @@ gcal.cli is a command-line interface tool built with Python3, Pytest, Typer, and
 Clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/aandrewchen/gcal.cli.git
-cd gcal.cli
+git clone https://github.com/aandrewchen/googleCal.cli.git
+cd googleCal.cli
 pip install -r requirements.txt
 ```
 
 #### Step 2:
+Create a Google Cloud project! Go to "Credentials" > "Create Credentials" > "OAuth client ID" (please select "Desktop app")
+
+Download the ```credentials.json``` file and place it in the same directory as googleCal.cli!
+
+#### Step 3:
 Head over to your Google Calendar and find the calendar you want to manage!
 
 Click on the three buttons on the side and go to "Settings and Sharing" > "Integrate calendar" > "Calendar ID" (it should end in @group.calendar.google.com).
 
 Create a ```.env ``` file with CALENDAR_ID="Calendar ID"
 
-#### Step 3:
-When you use googleCal.cli for the first time, the CLI will ask you to allow the application to access your Google Calendar. After that, you can start automating and managing your Google Calendar!
+#### Step 4:
+When you use googleCal.cli for the first time, the CLI will ask you to allow the application to access your Google Calendar. **After that, you can start automating and managing your Google Calendar 📅 !**
 
 ## Usage
 You can use the `--help` flag with any command to get information about how to use it.
-![Screenshot 2024-01-14 at 3 11 58 AM](https://github.com/aandrewchen/gcal.cli/assets/125727520/0369b174-f370-4634-8ba2-426b77185991)
+![Screenshot 2024-01-14 at 3 11 58 AM](https://github.com/aandrewchen/googleCal.cli/assets/125727520/0561c821-0f16-48e3-a9b2-3e30c7f5a5ab)
 
-### Here are some examples of how to use gcal.cli:
+### Here are some examples of how to use googleCal.cli:
 
 #### Get the next 3 events and display them in a table
 ```bash
 python cli.py get 3 --table y
 ```
-![Screenshot 2024-01-14 at 3 09 31 AM](https://github.com/aandrewchen/gcal.cli/assets/125727520/211789ec-b5a7-4c59-b4e8-650c653479f1)
+![Screenshot 2024-01-14 at 3 09 31 AM](https://github.com/aandrewchen/googleCal.cli/assets/125727520/2029d77c-008c-47e0-aa1b-8a0bcad53eb1)
 
 #### Create a new event
 ```bash
 python cli.py create
 ```
 ![Kapture 2024-01-14 at 22 36 35](https://github.com/aandrewchen/googleCal.cli/assets/125727520/80f6e414-73ff-4126-a218-b6f7cd00848c)
+
+Here is how to create that same event with arguments:
+```bash
+python cli.py create --summary "Dentist Appointment" --isrecurring n --date 2024-01-17 --start 11:00 --end 12:00 --color Peacock --confirm y
+```
 
 #### List ID of the next event in your calendar
 *Optionally include count to get the specified number of upcoming events*
@@ -60,7 +70,7 @@ python cli.py list-id <count>
 ```bash
 python cli.py delete <id>
 ```
-![Screenshot 2024-01-14 at 3 24 58 AM](https://github.com/aandrewchen/gcal.cli/assets/125727520/37438305-0044-4f4a-99c2-27bc9e41dabc)
+![Screenshot 2024-01-14 at 3 24 58 AM](https://github.com/aandrewchen/googleCal.cli/assets/125727520/ecf5a6f7-1348-409e-9a85-95d4549639a3)
 
 #### Start a timer for a quick event
 ```bash
