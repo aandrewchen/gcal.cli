@@ -36,6 +36,7 @@ python cli.py get 3 --table y
 ```bash
 python cli.py create
 ```
+![Kapture 2024-01-14 at 22 36 35](https://github.com/aandrewchen/googleCal.cli/assets/125727520/80f6e414-73ff-4126-a218-b6f7cd00848c)
 
 #### List ID of the next event in your calendar
 *Optionally include count to get the specified number of upcoming events*
