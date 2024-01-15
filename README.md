@@ -12,6 +12,7 @@ gcal.cli is a command-line interface tool built with Python3, Pytest, Typer, and
 
 ## Installation
 
+#### Step 1:
 Clone the repository and install the dependencies:
 
 ```bash
@@ -19,6 +20,16 @@ git clone https://github.com/aandrewchen/gcal.cli.git
 cd gcal.cli
 pip install -r requirements.txt
 ```
+
+#### Step 2:
+Head over to your Google Calendar and find the calendar you want to manage!
+
+Click on the three buttons on the side and go to "Settings and Sharing" > "Integrate calendar" > "Calendar ID" (it should end in @group.calendar.google.com).
+
+Create a ```.env ``` file with CALENDAR_ID="Calendar ID"
+
+#### Step 3:
+When you use googleCal.cli for the first time, the CLI will ask you to allow the application to access your Google Calendar. After that, you can start automating and managing your Google Calendar!
 
 ## Usage
 You can use the `--help` flag with any command to get information about how to use it.
