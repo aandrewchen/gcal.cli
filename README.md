@@ -1,4 +1,4 @@
-# gcal.cli
+# googleCal.cli
 
 gcal.cli is a command-line interface tool built with Python3, Pytest, Typer, and the Google Calendar API. It's designed to automate procedures and manage Google Calendar events.
 
