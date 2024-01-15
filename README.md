@@ -38,6 +38,7 @@ When you use googleCal.cli for the first time, the CLI will ask you to allow the
 
 ## Usage
 You can use the `--help` flag with any command to get information about how to use it.
+
 ![Screenshot 2024-01-14 at 3 11 58 AM](https://github.com/aandrewchen/googleCal.cli/assets/125727520/0561c821-0f16-48e3-a9b2-3e30c7f5a5ab)
 
 ### Here are some examples of how to use googleCal.cli:
@@ -81,6 +82,7 @@ python cli.py start
 ```bash
 python cli.py stop
 ```
+![Screenshot 2024-01-14 at 11 15 51 PM](https://github.com/aandrewchen/googleCal.cli/assets/125727520/b0d10c1e-bfbe-49ce-9be9-663a6b3a2256)
 
 ## Testing
 You can run the tests with Pytest:
