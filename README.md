@@ -10,6 +10,9 @@ googleCal.cli is a command-line interface tool built with Python3, Pytest, Typer
 - **Display** events in a table format 📋
 - **Start** a timer for a quick event ⏱️ 
 
+## Requirements
+Python 3.6+
+
 ## Installation
 
 #### Step 1:
