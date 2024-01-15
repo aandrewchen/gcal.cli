@@ -99,3 +99,5 @@ coverage run -m pytest
 
 ## Contributing
 Contributions are welcome! Please create a new issue if you find a bug or have a feature request. If you want to contribute code, please fork the repository and create a pull request.
+
+Made by Andrew Chen
